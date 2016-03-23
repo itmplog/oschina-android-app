@@ -4,7 +4,7 @@ import android.text.Html;
 import android.text.Spanned;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.IconTextView;
+import com.joanzapata.iconify.widget.IconTextView;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;

@@ -1,5 +1,4 @@
 apply plugin: 'com.android.application'
-apply plugin: 'newlens'
 
 android {
     compileSdkVersion 23
@@ -28,7 +27,6 @@ dependencies {
     compile 'org.kymjs.kjframe:kjframe:2.6'
     compile 'com.makeramen:roundedimageview:2.1.1'
     compile 'com.uwetrottmann.photoview:library:1.2.4'
-    compile 'com.networkbench.newlens.agent.android:nbs.newlens.agent:2.3.1'
     compile 'com.google.zxing:core:3.2.1'
-    compile 'com.joanzapata.iconify:android-iconify:2.1.1'
+    compile 'com.joanzapata.iconify:android-iconify:2.2.2'
 }
