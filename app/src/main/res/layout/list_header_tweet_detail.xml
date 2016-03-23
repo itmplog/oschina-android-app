@@ -94,7 +94,7 @@
             android:text="@string/fa_thumbs_o_up"
             android:textSize="16sp" />
 
-        <IconTextView
+        <com.joanzapata.iconify.widget.IconTextView
             style="@style/list_text_info"
             android:text="{fa-comments-o} "
             android:textSize="14sp"/>

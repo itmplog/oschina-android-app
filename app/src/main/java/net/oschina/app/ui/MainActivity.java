@@ -1,16 +1,22 @@
 package net.oschina.app.ui;
 
+import android.Manifest;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBar;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.text.Html;
 import android.util.TypedValue;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -42,6 +48,11 @@ import net.oschina.app.util.UpdateManager;
 import net.oschina.app.widget.BadgeView;
 import net.oschina.app.widget.MyFragmentTabHost;
 
+import org.kymjs.kjframe.http.KJAsyncTask;
+import org.kymjs.kjframe.utils.FileUtils;
+
+import java.io.File;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
@@ -51,6 +62,8 @@ public class MainActivity extends AppCompatActivity implements
         OnTouchListener {
 
     private DoubleClickExitHelper mDoubleClickExit;
+    private final int REQUESTWRITERESULT = 112;
+    private boolean shouldClean = false;
 
     /**
      * Fragment managing the behaviors, interactions and presentation of the
@@ -125,6 +138,21 @@ public class MainActivity extends AppCompatActivity implements
         NBSAppAgent.setLicenseKey("0ed0cc66c5cb45c0a91c6fa932ca99ac")
                 .withCrashReportEnabled(true).withLocationServiceEnabled(true)
                 .start(this);*/
+
+        Intent intent = getIntent();
+        shouldClean = intent.getBooleanExtra("shouldClean", false);
+        if(!intent.getBooleanExtra("hasWrite", true)){
+            Handler handler = new Handler();
+            handler.postDelayed(new Runnable() {
+
+                @Override
+                public void run() {
+                    //new UpdateManager(MainActivity.this, false).checkUpdate();
+                    requestWritePermission();
+                }
+            }, 2000);
+        }
+
     }
 
     @Override
@@ -379,5 +407,52 @@ public class MainActivity extends AppCompatActivity implements
             }
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    private void requestWritePermission(){
+        ActivityCompat.requestPermissions(MainActivity.this,
+                new String[]{Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                REQUESTWRITERESULT);
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String[] permissions, int[] grantResults) {
+        //super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        switch (requestCode){
+            case REQUESTWRITERESULT:
+                if(grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    if(shouldClean){
+                        final File folder = FileUtils.getSaveFolder("OSChina/imagecache");
+                        KJAsyncTask.execute(new Runnable() {
+                            @Override
+                            public void run() {
+                                for (File file : folder.listFiles()) {
+                                    file.delete();
+                                }
+                            }
+                        });
+                    }
+
+                }else{
+                    AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this)
+                            //.setIcon(R.drawable.ic_launcher)
+                            .setTitle("Need Permission")
+                            .setMessage(Html.fromHtml("Really need permission to write external storage! Press Retry to Grant Permission!"))
+                            .setPositiveButton("Retry", new DialogInterface.OnClickListener() {
+                                @Override
+                                public void onClick(DialogInterface dialog, int which) {
+                                    requestWritePermission();
+                                    dialog.dismiss();
+                                }
+                            })
+                            .setNegativeButton(android.R.string.cancel, null);
+                    builder.create()
+                            .show();
+
+                }
+                break;
+            default:
+                super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        }
     }
 }

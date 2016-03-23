@@ -131,7 +131,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
 
-            <IconTextView
+            <com.joanzapata.iconify.widget.IconTextView
                 style="@style/list_text_info"
                 android:text="{fa-clock-o} " />
 
@@ -140,7 +140,7 @@
                 android:layout_marginRight="10dp"
                 style="@style/list_text_info" />
 
-            <IconTextView
+            <com.joanzapata.iconify.widget.IconTextView
                 style="@style/list_text_info"
                 android:text="{fa-comments-o} " />
 

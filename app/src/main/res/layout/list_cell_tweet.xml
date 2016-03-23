@@ -74,7 +74,7 @@
 			android:layout_alignParentLeft="true"
 			android:orientation="horizontal">
 
-			<IconTextView
+			<com.joanzapata.iconify.widget.IconTextView
 				style="@style/list_text_info"
 				android:text="{fa-clock-o} "/>
 
@@ -112,7 +112,7 @@
 				android:textColor="@color/gray"
 				android:textSize="15sp"/>
 
-			<IconTextView
+			<com.joanzapata.iconify.widget.IconTextView
 				style="@style/list_text_info"
 				android:text="{fa-comments-o} "/>
 

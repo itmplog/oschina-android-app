@@ -48,7 +48,7 @@
             android:layout_alignParentLeft="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
-            <IconTextView
+            <com.joanzapata.iconify.widget.IconTextView
                 style="@style/list_text_info"
                 android:text="{fa-clock-o} " />
 
@@ -62,7 +62,7 @@
             android:layout_alignParentRight="true"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content">
-            <IconTextView
+            <com.joanzapata.iconify.widget.IconTextView
                 style="@style/list_text_info"
                 android:text="{fa-comments-o} " />
 

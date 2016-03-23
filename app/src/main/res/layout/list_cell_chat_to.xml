@@ -53,7 +53,7 @@
                     android:layout_height="24dip"
                     android:visibility="gone"/>
 
-                <IconTextView
+                <com.joanzapata.iconify.widget.IconTextView
                     android:id="@+id/itv_error"
                     style="@style/list_text_info"
                     android:layout_centerInParent="true"

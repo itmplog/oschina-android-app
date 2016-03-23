@@ -9,9 +9,13 @@ import org.kymjs.kjframe.http.KJAsyncTask;
 import org.kymjs.kjframe.utils.FileUtils;
 import org.kymjs.kjframe.utils.PreferenceHelper;
 
+import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.Build;
+import android.support.v4.content.ContextCompat;
 import android.view.View;
 import android.view.animation.AlphaAnimation;
 import android.view.animation.Animation;
@@ -25,7 +29,8 @@ import android.view.animation.Animation.AnimationListener;
  * 
  */
 public class AppStart extends Activity {
-
+    private boolean hasWritePermission = true;
+    private boolean shouldCleanImageCache = false;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -52,8 +57,16 @@ public class AppStart extends Activity {
             public void onAnimationRepeat(Animation animation) {}
 
             @Override
-            public void onAnimationStart(Animation animation) {}
+            public void onAnimationStart(Animation animation) {
+                // check permisson
+                if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.M  && ContextCompat.checkSelfPermission(AppStart.this,
+                        Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED){
+                    //requestWritePermission();  has no permission
+                    hasWritePermission = false;
+                }
+            }
         });
+
     }
 
     @Override
@@ -65,7 +78,11 @@ public class AppStart extends Activity {
         if (cacheVersion < currentVersion) {
             PreferenceHelper.write(this, "first_install", "first_install",
                     currentVersion);
+
+            if(hasWritePermission)
             cleanImageCache();
+            else
+                shouldCleanImageCache = true;
         }
     }
 
@@ -85,9 +102,12 @@ public class AppStart extends Activity {
      * 跳转到...
      */
     private void redirectTo() {
+
         Intent uploadLog = new Intent(this, LogUploadService.class);
         startService(uploadLog);
         Intent intent = new Intent(this, MainActivity.class);
+        intent.putExtra("hasWrite", hasWritePermission);
+        intent.putExtra("shouldClean", shouldCleanImageCache);
         startActivity(intent);
         finish();
     }

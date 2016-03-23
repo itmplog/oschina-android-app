@@ -50,7 +50,7 @@
                 style="@style/list_text_info"
                 android:layout_marginRight="10dp" />
 
-            <IconTextView
+            <com.joanzapata.iconify.widget.IconTextView
                 style="@style/list_text_info"
                 android:text="{fa-clock-o} " />
 
@@ -65,7 +65,7 @@
             android:layout_alignParentRight="true"
             android:orientation="horizontal">
 
-            <IconTextView
+            <com.joanzapata.iconify.widget.IconTextView
                 style="@style/list_text_info"
                 android:text="{fa-thumbs-o-up} " />
 
@@ -74,7 +74,7 @@
                 style="@style/list_text_info"
                 android:layout_marginRight="10dp" />
 
-            <IconTextView
+            <com.joanzapata.iconify.widget.IconTextView
                 style="@style/list_text_info"
                 android:text="{fa-comments-o} " />
 
